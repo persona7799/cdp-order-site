@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="CDP 크레이지 동팔 아케이드 레버와 추가 탄성 고무 주문 안내"><title>CDP · 크레이지 동팔</title><link rel="stylesheet" href="style.css"><script defer src="app.js"></script></head>
+<body><header><a class="brand" href="#">CDP<span>CRAZY DONG PAL</span></a><nav><a href="#products">제품</a><a href="#guide">구매 안내</a><button id="cart-open">주문 목록 <b id="cart-count">0</b></button></nav></header>
+<main><section class="hero"><div class="hero-copy"><p class="eyebrow">PRECISION IN EVERY MOVE</p><h1>당신의 플레이에,<br><em>정확함을 더하다.</em></h1><p class="intro">크레이지 동팔의 아케이드 레버.<br>내 손에 맞는 탄성으로 완성하는 나만의 플레이.</p><a class="primary" href="#products">레버 & 고무 선택하기 <span>↗</span></a><p class="small">CDP QUADRUPLE EDGE LEVER</p></div><div class="hero-art"><span class="halo"></span><img src="assets/lever.png" alt="녹색 손잡이의 CDP 쿼드러플 엣지 레버 두 가지 각도"><span class="art-label">QUADRUPLE EDGE <b>01 / CDP</b></span></div></section>
+<div class="announcement"><span class="pill">PRE-ORDER</span><strong>예약구매 · 11월 2일부터 순차 발송</strong><span>주문 순서에 따라 발송됩니다.</span></div>
+<section id="products"><div class="section-head"><div><p class="eyebrow">BUILD YOUR SETUP</p><h2>플레이를 위한 선택</h2></div><span class="muted">레버부터 추가 탄성 고무까지</span></div><div class="products"><article class="product"><div class="product-image"><span class="tag">SIGNATURE LEVER</span><img src="assets/lever.png" alt="CDP Quadruple Edge Lever 제품 이미지"></div><div class="product-info"><p class="eyebrow">CRAZY DONG PAL</p><h3>CDP Quadruple Edge Lever</h3><p class="muted">CDP 쿼드러플 엣지 레버 · 녹색 손잡이</p><div class="buy-row"><strong id="lever-price">가격 안내 예정</strong><div class="stepper" data-item="lever"><button aria-label="레버 수량 줄이기" data-delta="-1">−</button><output>0</output><button aria-label="레버 수량 늘리기" data-delta="1">+</button></div></div></div></article><article class="rubber"><span class="tag">TUNE YOUR FEEL</span><h3>추가 탄성 고무</h3><p class="muted">별도 구매 상품입니다.<br>원하는 종류별로 수량을 선택해 주세요.</p><div class="rubber-visual" aria-hidden="true"><i></i><span>FIND YOUR<br><b>PERFECT FEEL.</b></span></div><div id="rubber-options"></div><p class="small">추가 구매를 원하지 않으시면 0개로 두세요.</p></article></div></section>
+<section id="guide" class="guide"><div><p class="eyebrow">BEFORE YOU ORDER</p><h2>구매 전 확인해 주세요</h2></div><div><details open><summary>제품 구성 및 안내</summary><p>제품 구성품 및 자세한 사항은 동봉된 설명서를 참고해 주세요.</p></details><details><summary>검수판 안내</summary><p>CDP Quadruple Edge Lever는 입력 편차가 거의 제로 수준으로, 검수판 없이 판매합니다.</p></details><details><summary>주문 및 배송 안내</summary><p>예약구매 상품은 11월 2일부터 순차 발송됩니다. 배송비는 별도 안내합니다. 상품 선택 후 배송 정보를 입력하여 주문을 접수해 주세요.</p></details></div></section></main>
+<footer><a class="brand" href="#">CDP<span>CRAZY DONG PAL</span></a><p>정확한 입력, 나만의 플레이.</p><span>© CDP · 크레이지 동팔</span></footer>
+<div class="bottom-bar"><div><b id="bottom-count">선택한 상품 0개</b><span id="bottom-total">가격 안내 예정</span></div><button class="primary" id="review">주문 목록 확인 <span>→</span></button></div>
+<dialog id="cart"><div class="dialog-head"><div><p class="eyebrow">YOUR SETUP</p><h2>주문 목록</h2></div><button id="cart-close" aria-label="주문 목록 닫기">✕</button></div><div id="cart-items"></div><p id="total"></p><form id="checkout">
+<p class="notice">배송비는 별도 안내합니다. 주문 접수는 결제 완료를 의미하지 않습니다.</p>
+<div class="form-grid">
+<label>주문자 이름<input name="name" required maxlength="60" autocomplete="name"></label>
+<label>받는 분<input name="recipient" required maxlength="60" autocomplete="shipping name"></label>
+<label>연락처<input name="phone" type="tel" required maxlength="30" autocomplete="shipping tel" placeholder="010-1234-5678"></label>
+<label>우편번호<input name="postcode" required pattern="[0-9]{5}" maxlength="5" inputmode="numeric" autocomplete="shipping postal-code" placeholder="5자리"></label>
+<label class="wide">배송 주소<input name="address" required maxlength="200" autocomplete="shipping address-line1"></label>
+<label class="wide">상세 주소<input name="addressDetail" maxlength="200" autocomplete="shipping address-line2" placeholder="동·호수 등"></label>
+<label class="wide">요청 사항<textarea name="note" maxlength="500" rows="2"></textarea></label>
+</div>
+<details><summary>개인정보 수집·이용 안내</summary><p>CDP(크레이지 동팔)는 주문 확인 및 배송을 위해 이름, 받는 분, 연락처, 주소, 주문 내용을 수집합니다. 주문·배송 처리 완료 후 불필요한 개인정보는 삭제하며, 관계 법령에 따라 보관이 필요한 거래 기록은 해당 기간 동안 보관합니다. 동의를 거부할 수 있으나 주문 접수는 어렵습니다.</p></details>
+<label class="consent"><input type="checkbox" name="consent" required> [필수] 개인정보 수집·이용에 동의합니다.</label>
+<button class="primary" id="submit-order" type="submit">주문 접수하기</button>
+<p id="order-status" role="status" aria-live="polite"></p>
+</form><section id="order-success" hidden><h3>주문이 접수되었습니다.</h3><p>주문번호를 보관해 주세요.</p><strong id="order-number"></strong><p id="order-amount"></p><p class="notice">배송비는 별도 안내합니다. 아직 결제 완료 상태가 아닙니다.</p></section></dialog>
+</body></html>

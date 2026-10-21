@@ -1,0 +1,1 @@
+{"name":"cdp-order-site","private":true,"version":"1.0.0","scripts":{"build":"node build.mjs","test":"node --test tests/*.test.mjs"},"engines":{"node":">=20"}}
