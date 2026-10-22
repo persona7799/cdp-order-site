@@ -19,7 +19,7 @@ export function validate(body) {
     quantities[id] = q; total += q*price;
   }
   if (!total) throw Error('상품을 선택해 주세요.');
-  return {requestId:body.requestId,customer,quantities,total,consent:true};
+  return {requestId:body.requestId,customer,quantities,total,shippingFee:4000,grandTotal:total+4000,consent:true};
 }
 export async function handler(event) {
   const reply = (statusCode, data)=>({statusCode,headers:{'Content-Type':'application/json; charset=utf-8','Cache-Control':'no-store'},body:JSON.stringify(data)});
@@ -34,6 +34,7 @@ export async function handler(event) {
     const response = await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...order,secret:process.env.ORDER_SHARED_SECRET}),signal:AbortSignal.timeout(20000)});
     const data = await response.json();
     if (!response.ok || !data.ok || !/^CDP-[A-Z0-9-]+$/.test(data.orderId) || data.total !== order.total) throw Error('save');
-    return reply(200,{ok:true,orderId:data.orderId,total:data.total,shippingFee:null});
+    if (data.shippingFee !== null && (data.shippingFee !== 4000 || data.grandTotal !== data.total + 4000)) throw Error('shipping');
+    return reply(200,{ok:true,orderId:data.orderId,total:data.total,shippingFee:data.shippingFee,grandTotal:data.grandTotal});
   } catch {return reply(502,{error:'주문 결과를 확인하지 못했습니다. 입력 내용을 유지한 채 다시 주문하기를 눌러 주세요. 같은 주문은 중복 저장되지 않습니다.'});}
 }

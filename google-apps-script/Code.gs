@@ -21,16 +21,20 @@ function doPost(e) {
     let sheet = spreadsheet.getSheetByName('CDP 주문');
     if (!sheet) {sheet=spreadsheet.insertSheet('CDP 주문');sheet.appendRow(HEADERS);sheet.setFrozenRows(1);}
     if (JSON.stringify(sheet.getRange(1,1,1,HEADERS.length).getValues()[0]) !== JSON.stringify(HEADERS)) return output({ok:false});
+    // Append the new column without changing existing columns or historical orders.
+    const totalHeader=sheet.getRange(1,25).getValue();
+    if (!totalHeader) sheet.getRange(1,25).setValue('총 주문 금액');
+    else if (totalHeader !== '총 주문 금액') return output({ok:false});
     if (sheet.getLastRow()>1) {
       const match=sheet.getRange(2,1,sheet.getLastRow()-1,1).createTextFinder(body.requestId).matchEntireCell(true).findNext();
-      if (match) {const row=sheet.getRange(match.getRow(),1,1,HEADERS.length).getValues()[0];return output({ok:true,orderId:row[1],total:Number(row[15])});}
+      if (match) {const row=sheet.getRange(match.getRow(),1,1,HEADERS.length).getValues()[0];const shippingFee=typeof row[16]==='number'?row[16]:null;return output({ok:true,orderId:row[1],total:Number(row[15]),shippingFee,grandTotal:shippingFee===null?null:Number(row[15])+shippingFee});}
     }
     const now = new Date();
     const orderId='CDP-'+Utilities.formatDate(now,'Asia/Seoul','yyyyMMdd')+'-'+Utilities.getUuid().replace(/-/g,'').slice(0,12).toUpperCase();
     // Force untrusted text to a literal to prevent spreadsheet formula injection and preserve leading zeros.
     const literal = value => "'"+String(value);
-    sheet.appendRow([body.requestId,orderId,Utilities.formatDate(now,'Asia/Seoul','yyyy-MM-dd HH:mm:ss'),...['name','recipient','phone','postcode','address','addressDetail'].map(k=>literal(c[k])),...quantities,total,'별도 안내',literal(c.note),'동의 v1','접수','미확인','','','']);
+    sheet.appendRow([body.requestId,orderId,Utilities.formatDate(now,'Asia/Seoul','yyyy-MM-dd HH:mm:ss'),...['name','recipient','phone','postcode','address','addressDetail'].map(k=>literal(c[k])),...quantities,total,4000,literal(c.note),'동의 v1','접수','미확인','','','',total+4000]);
     SpreadsheetApp.flush();
-    return output({ok:true,orderId,total});
+    return output({ok:true,orderId,total,shippingFee:4000,grandTotal:total+4000});
   } catch {return output({ok:false});} finally {if(lock && lock.hasLock())lock.releaseLock();}
 }
