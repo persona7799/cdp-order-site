@@ -32,13 +32,40 @@ export async function handler(event) {
   if ((event.body || '').length > 12000) return reply(413,{error:'주문 정보가 너무 깁니다.'});
   let order;
   try {order = validate(JSON.parse(event.body));} catch(e) {return reply(400,{error:e instanceof SyntaxError?'주문 형식을 확인해 주세요.':e.message});}
+  // Report only a fixed diagnostic code; never expose upstream HTML, credentials or customer data.
+  let stage = 'CONFIG';
   try {
-    const url = new URL(process.env.ORDER_SCRIPT_URL);
+    const url = new URL(process.env.ORDER_SCRIPT_URL.trim());
     if (url.protocol !== 'https:' || url.hostname !== 'script.google.com' || !url.pathname.endsWith('/exec')) throw Error('config');
+    stage = 'CONNECTION';
     const response = await fetch(url,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({...order,secret:process.env.ORDER_SHARED_SECRET}),signal:AbortSignal.timeout(20000)});
+    stage = 'GOOGLE_HTTP';
+    if (!response.ok) throw Error('http');
+    stage = 'GOOGLE_RESPONSE';
     const data = await response.json();
-    if (!response.ok || !data.ok || !/^CDP-[A-Z0-9-]+$/.test(data.orderId) || data.total !== order.total) throw Error('save');
+    stage = 'SCRIPT_REJECTED';
+    if (!data || data.ok !== true) throw Error('script');
+    stage = 'ORDER_NUMBER';
+    if (typeof data.orderId !== 'string' || !/^CDP-[A-Z0-9-]+$/.test(data.orderId)) throw Error('id');
+    stage = 'SUBTOTAL';
+    if (data.total !== order.total) throw Error('total');
+    stage = 'SHIPPING';
     if (data.shippingFee !== null && (data.shippingFee !== 4000 || data.grandTotal !== data.total + 4000)) throw Error('shipping');
     return reply(200,{ok:true,orderId:data.orderId,total:data.total,shippingFee:data.shippingFee,grandTotal:data.grandTotal});
-  } catch {return reply(502,{error:'주문 결과를 확인하지 못했습니다. 입력 내용을 유지한 채 다시 주문하기를 눌러 주세요. 같은 주문은 중복 저장되지 않습니다.'});}
+  } catch (error) {
+    const code = error.name === 'TimeoutError' || error.name === 'AbortError' ? 'TIMEOUT' : stage;
+    console.warn('CDP_ORDER_RESPONSE_' + code);
+    const messages = {
+      CONFIG: '주문 서버의 구글 웹 앱 주소 설정을 확인해야 합니다.',
+      CONNECTION: '구글 주문 서버에 연결하지 못했습니다.',
+      GOOGLE_HTTP: '구글 주문 서버가 오류 응답을 반환했습니다.',
+      GOOGLE_RESPONSE: '구글 응답이 주문 데이터 형식이 아닙니다. 웹 앱 배포 권한과 실행 오류를 확인해야 합니다.',
+      SCRIPT_REJECTED: 'Apps Script가 주문 처리 성공을 반환하지 않았습니다. 스크립트 설정과 시트 구조를 확인해야 합니다.',
+      ORDER_NUMBER: '저장 응답의 주문번호 형식을 확인해야 합니다.',
+      SUBTOTAL: '시트 저장 응답의 상품 금액과 주문 금액이 다릅니다.',
+      SHIPPING: '시트 저장 응답의 배송비 또는 총 주문 금액이 현재 사이트와 다릅니다.',
+      TIMEOUT: '구글 주문 서버의 응답 시간이 초과되었습니다.'
+    };
+    return reply(502,{code,error:messages[code] + ' [진단 코드: ' + code + '] 이미 시트에 기록됐다면 주문을 새로 작성하지 말고 판매자에게 저장 여부를 확인해 주세요.'});
+  }
 }
