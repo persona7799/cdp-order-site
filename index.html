@@ -11,16 +11,30 @@
 <p class="notice">배송비는 주문당 4,000원 한 번만 부과됩니다. 레버와 고무를 함께 구매하거나 여러 개 구매해도 동일합니다. 주문 접수는 결제 완료를 의미하지 않습니다.</p>
 <div class="form-grid">
 <label>주문자 이름<input name="name" required maxlength="60" autocomplete="name"></label>
-<label>받는 분<input name="recipient" required maxlength="60" autocomplete="shipping name"></label>
+
 <label>연락처<input name="phone" type="tel" required maxlength="30" autocomplete="shipping tel" placeholder="010-1234-5678"></label>
-<label>우편번호<input name="postcode" required pattern="[0-9]{5}" maxlength="5" inputmode="numeric" autocomplete="shipping postal-code" placeholder="5자리"></label>
+
 <label class="wide">배송 주소<input name="address" required maxlength="200" autocomplete="shipping address-line1"></label>
 <label class="wide">상세 주소<input name="addressDetail" maxlength="200" autocomplete="shipping address-line2" placeholder="동·호수 등"></label>
-<label class="wide">요청 사항<textarea name="note" maxlength="500" rows="2"></textarea></label>
+<section class="payment-guide" aria-label="입금 및 확인 안내">
+<p class="payment-label">무통장 입금 안내</p>
+<p class="payment-bank">국민은행 <span>예금주 이동섭</span></p>
+<p class="payment-account">59970204088052</p>
+<p class="payment-instruction">주문 접수 후, <strong>배송비를 포함한 총 주문 금액</strong>을 위 계좌로 입금해 주세요.</p>
+<div class="payment-contact"><span>입금 후 꼭 연락해 주세요</span><p>카카오톡 ID <strong class="kakao-id">crazydongpal</strong></p><p><strong>주문자 이름 / 입금 금액</strong>을 보내주시면 입금을 확인합니다.</p></div>
+<p class="payment-warning">입금 확인이 되지 않으면 발송 순번이 뒤로 밀릴 수 있습니다.</p>
+</section>
 </div>
-<details><summary>개인정보 수집·이용 안내</summary><p>CDP(크레이지 동팔)는 주문 확인 및 배송을 위해 이름, 받는 분, 연락처, 주소, 주문 내용을 수집합니다. 주문·배송 처리 완료 후 불필요한 개인정보는 삭제하며, 관계 법령에 따라 보관이 필요한 거래 기록은 해당 기간 동안 보관합니다. 동의를 거부할 수 있으나 주문 접수는 어렵습니다.</p></details>
+<details><summary>개인정보 수집·이용 안내</summary><p>CDP(크레이지 동팔)는 주문 확인 및 배송을 위해 주문자 이름, 연락처, 주소, 주문 내용을 수집합니다. 주문·배송 처리 완료 후 불필요한 개인정보는 삭제하며, 관계 법령에 따라 보관이 필요한 거래 기록은 해당 기간 동안 보관합니다. 동의를 거부할 수 있으나 주문 접수는 어렵습니다.</p></details>
 <label class="consent"><input type="checkbox" name="consent" required> [필수] 개인정보 수집·이용에 동의합니다.</label>
 <button class="primary" id="submit-order" type="submit">주문 접수하기</button>
 <p id="order-status" role="status" aria-live="polite"></p>
-</form><section id="order-success" hidden><h3>주문이 접수되었습니다.</h3><p>주문번호를 보관해 주세요.</p><strong id="order-number"></strong><p id="order-amount"></p><p class="notice">배송비는 주문당 4,000원 한 번만 부과됩니다. 레버와 고무를 함께 구매하거나 여러 개 구매해도 동일합니다. 아직 결제 완료 상태가 아닙니다.</p></section></dialog>
+</form><section id="order-success" hidden><h3>주문이 접수되었습니다.</h3><p>주문번호를 보관해 주세요.</p><strong id="order-number"></strong><p id="order-amount"></p><p class="notice">배송비는 주문당 4,000원 한 번만 부과됩니다. 레버와 고무를 함께 구매하거나 여러 개 구매해도 동일합니다. 아직 결제 완료 상태가 아닙니다.</p><section class="payment-guide" aria-label="입금 및 확인 안내">
+<p class="payment-label">무통장 입금 안내</p>
+<p class="payment-bank">국민은행 <span>예금주 이동섭</span></p>
+<p class="payment-account">59970204088052</p>
+<p class="payment-instruction">주문 접수 후, <strong>배송비를 포함한 총 주문 금액</strong>을 위 계좌로 입금해 주세요.</p>
+<div class="payment-contact"><span>입금 후 꼭 연락해 주세요</span><p>카카오톡 ID <strong class="kakao-id">crazydongpal</strong></p><p><strong>주문자 이름 / 입금 금액</strong>을 보내주시면 입금을 확인합니다.</p></div>
+<p class="payment-warning">입금 확인이 되지 않으면 발송 순번이 뒤로 밀릴 수 있습니다.</p>
+</section></section></dialog>
 </body></html>

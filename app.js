@@ -21,7 +21,7 @@ form.addEventListener('submit', async event => {
   event.preventDefault();
   if(busy || !selected().length || !form.reportValidity()) return;
   const fields = new FormData(form);
-  const customer = Object.fromEntries(['name','recipient','phone','postcode','address','addressDetail','note'].map(k=>[k,String(fields.get(k)||'').trim()]));
+  const customer = Object.fromEntries(['name','phone','address','addressDetail'].map(k=>[k,String(fields.get(k)||'').trim()]));
   if(!/^0\d{8,10}$/.test(customer.phone.replace(/[\s-]/g,''))){status.textContent='연락처를 확인해 주세요.';return;}
   busy=true;
   document.querySelector('#cart-close').disabled=true;

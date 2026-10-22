@@ -2,13 +2,17 @@ const prices = {lever:95000,'rubber-15':4000,'rubber-20':4000,'rubber-25':4000,'
 export function validate(body) {
   if (!body || typeof body !== 'object' || !/^[a-f0-9-]{36}$/.test(body.requestId || '')) throw Error('올바르지 않은 주문 요청입니다.');
   const customer = {};
-  const limits = {name:60,recipient:60,phone:30,postcode:5,address:200,addressDetail:200,note:500};
+  const limits = {name:60,phone:30,address:200,addressDetail:200};
   for (const [key,max] of Object.entries(limits)) {
     if (typeof body.customer?.[key] !== 'string') throw Error('배송 정보를 확인해 주세요.');
     customer[key] = body.customer[key].trim();
-    if (customer[key].length > max || (key !== 'note' && key !== 'addressDetail' && !customer[key])) throw Error('배송 정보를 확인해 주세요.');
+    if (customer[key].length > max || (key !== 'addressDetail' && !customer[key])) throw Error('배송 정보를 확인해 주세요.');
   }
-  if (!/^\d{5}$/.test(customer.postcode) || !/^0\d{8,10}$/.test(customer.phone.replace(/[\s-]/g,''))) throw Error('연락처와 우편번호를 확인해 주세요.');
+  if (!/^0\d{8,10}$/.test(customer.phone.replace(/[\s-]/g,''))) throw Error('연락처를 확인해 주세요.');
+  // Preserve the existing sheet schema without collecting removed checkout fields.
+  customer.recipient = customer.name;
+  customer.postcode = '';
+  customer.note = '';
   if (body.consent !== true) throw Error('개인정보 수집·이용 동의가 필요합니다.');
   const quantities = {};
   if (!body.quantities || Object.keys(body.quantities).some(k=>!(k in prices))) throw Error('상품 정보를 확인해 주세요.');
